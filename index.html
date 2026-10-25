@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Shop cosmetics, fashion and everyday essentials at KHARID POINT BD.">
+  <title>KHARID POINTᴮᴰ | Your Choice, Your Point.</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,sans-serif;color:#242424;background:#fff}
+    header{background:#142c24;color:white;padding:18px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .brand{font-size:24px;font-weight:800;letter-spacing:.5px}
+    .tagline{font-size:12px;color:#d8e7dc;margin-top:5px}
+    .hero{padding:54px 5%;background:#edf4ee;text-align:center}
+    .hero h1{font-size:clamp(28px,5vw,46px);margin:0 0 12px;color:#173b2d}
+    .hero p{line-height:1.7;color:#526057}
+    .btn{display:inline-block;background:#176b45;color:white;padding:12px 19px;border-radius:7px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
+    .search{width:min(520px,100%);padding:13px;border:1px solid #ccc;border-radius:7px;margin-top:18px;font-size:16px}
+    main{padding:32px 5%}
+    h2{color:#173b2d}
+    .categories{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 30px}
+    .cat{padding:10px 15px;border:1px solid #d8e2da;border-radius:20px;background:white;cursor:pointer}
+    .cat.active{background:#173b2d;color:white}
+    .products{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+    .card{border:1px solid #e5e5e5;border-radius:12px;overflow:hidden;padding:16px}
+    .placeholder{height:145px;background:#f1f4f1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:45px}
+    .card h3{margin-bottom:8px}
+    .price{font-size:19px;font-weight:bold;color:#176b45}
+    .note{color:#777;font-size:13px;line-height:1.6}
+    .order{width:100%;margin-top:10px;text-align:center}
+    .empty{padding:20px;color:#777}
+    footer{background:#142c24;color:white;text-align:center;padding:25px 5%;line-height:1.8}
+    @media(max-width:480px){header{padding:16px 4%}.brand{font-size:21px}.hero{padding:40px 5%}main{padding:25px 4%}}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <div class="brand">KHARID POINTᴮᴰ</div>
+      <div class="tagline">Your Choice, Your Point.</div>
+    </div>
+    <a class="btn" href="#products">Shop Now</a>
+  </header>
+
+  <section class="hero">
+    <h1>Discover Your Everyday Favorites</h1>
+    <p>Explore beauty, fashion and more — all in one place.</p>
+    <a class="btn" href="#products">Explore Products</a><br>
+    <input id="search" class="search" type="search" placeholder="Search products..." aria-label="Search products">
+  </section>
+
+  <main>
+    <h2>Shop by Category</h2>
+    <div class="categories">
+      <button class="cat active" data-category="All">All Products</button>
+      <button class="cat" data-category="Beauty">Beauty</button>
+      <button class="cat" data-category="Fashion">Fashion</button>
+      <button class="cat" data-category="Lifestyle">Lifestyle</button>
+    </div>
+
+    <h2 id="products">Featured Products</h2>
+    <p class="note">These are sample products. Replace their names and prices before accepting orders.</p>
+    <div class="products" id="product-list"></div>
+    <p class="note">Cash on Delivery (COD) can be arranged when confirming your order on WhatsApp.</p>
+  </main>
+
+  <footer>
+    <strong>KHARID POINTᴮᴰ</strong><br>
+    Your Choice, Your Point.<br>
+    Online shopping in Bangladesh<br>
+    <span class="note">WhatsApp ordering • Cash on Delivery (subject to confirmation)</span>
+  </footer>
+
+  <script>
+    // Replace these sample items with your actual products.
+    // Add your WhatsApp number in international format, without + or spaces.
+    const WHATSAPP_NUMBER = "8801XXXXXXXXX";
+
+    const products = [
+      {name:"Beauty Product 01",category:"Beauty",price:350,emoji:"🧴"},
+      {name:"Fashion Item 01",category:"Fashion",price:650,emoji:"👜"},
+      {name:"Beauty Product 02",category:"Beauty",price:450,emoji:"✨"},
+      {name:"Lifestyle Item 01",category:"Lifestyle",price:500,emoji:"🎁"}
+    ];
+
+    let selectedCategory = "All";
+    const list = document.getElementById("product-list");
+    const search = document.getElementById("search");
+
+    function renderProducts(){
+      const term = search.value.trim().toLowerCase();
+      const filtered = products.filter(p =>
+        (selectedCategory === "All" || p.category === selectedCategory) &&
+        p.name.toLowerCase().includes(term)
+      );
+      list.innerHTML = "";
+      if(!filtered.length){
+        list.innerHTML = '<p class="empty">No products found. Try another search.</p>';
+        return;
+      }
+      filtered.forEach(p => {
+        const card = document.createElement("article");
+        card.className = "card";
+        const emoji = document.createElement("div");
+        emoji.className = "placeholder";
+        emoji.textContent = p.emoji;
+        const title = document.createElement("h3");
+        title.textContent = p.name;
+        const category = document.createElement("p");
+        category.className = "note";
+        category.textContent = p.category;
+        const price = document.createElement("p");
+        price.className = "price";
+        price.textContent = "৳" + p.price;
+        const order = document.createElement("a");
+        order.className = "btn order";
+        order.textContent = "Order on WhatsApp";
+        const message = "Hello KHARID POINT BD, I want to order: " + p.name + " — ৳" + p.price;
+        order.href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
+        order.target = "_blank";
+        order.rel = "noopener";
+        card.append(emoji,title,category,price,order);
+        list.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll(".cat").forEach(button => {
+      button.addEventListener("click",() => {
+        selectedCategory = button.dataset.category;
+        document.querySelectorAll(".cat").forEach(b => b.classList.toggle("active",b === button));
+        renderProducts();
+      });
+    });
+    search.addEventListener("input",renderProducts);
+    renderProducts();
+  </script>
+</body>
+</html>
